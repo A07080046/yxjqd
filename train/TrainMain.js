@@ -22,6 +22,8 @@ var Subscribable = require('Subscribable');
 var TrainGradeMessageBox = require('../../components/MessageBox/TrainGradeMessageBox.js');
 var TrainRankMessageBox = require('../../components/MessageBox/TrainRankMessageBox.js');
 var Progress = require('react-native-progress');
+
+var progressTimeID;
 module.exports = React.createClass({
     mixins: [Subscribable.Mixin],
     componentWillMount() {
@@ -124,8 +126,19 @@ module.exports = React.createClass({
                 } else {
                     this.setState({showWaitView:false});
                 }
+                clearInterval(progressTimeID);
+                this.setState({progress:0});
+                progressTimeID = setInterval(()=>{
+                    var progress = this.state.progress + 1/this.state.progressTime;
+                    if (progress >= 1) {
+                        clearInterval(progressTimeID);
+                    }
+                    this.setState({progress});
+                }, 1000);
                 break;
             case 3://演讲结束，打分弹框
+                clearInterval(progressTimeID);
+                this.setState({progress:0});
                 console.log('onbroadcast3 isSpeakerAngle', this.state.isSpeakerAngle);
                 if (!this.state.isSpeakerAngle) {
                     this.setState({overlayShowGrade:true});
@@ -144,7 +157,6 @@ module.exports = React.createClass({
                 break;
             case 6://游戏的打分,自己打完分停止10s的打分转圈，被打分者更新头像加分效果
                 this.setRankArrayScore(result);
-
                 break;
             case 7://退出房间,只剩一个人，返回入口界面
                 this.goBack();
@@ -179,6 +191,7 @@ module.exports = React.createClass({
             context:this.props.context,
             timeOut: 5,
             progress: 0,
+            progressTime:this.props.gameType==1?60:45,
         };
     },
     showGif(propCode) {
@@ -192,17 +205,8 @@ module.exports = React.createClass({
           this.setState({timeOut});
         }, 1000);
     },
-    componentDidMount() {
-      var timeID = setInterval(()=>{
-          var progress = this.state.progress + 0.01;
-          if (progress >= 1) {
-              clearInterval(timeID);
-          }
-          this.setState({progress});
-      }, 100);
-    },
     render() {
-        var time = 10-Math.floor(this.state.progress*10);
+        var time = this.state.progressTime-Math.floor(this.state.progress*this.state.progressTime);
         return (
             <View style={styles.container}>
                 {

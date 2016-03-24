@@ -109,7 +109,7 @@ module.exports = React.createClass({
                 title: '训练场',
                 component: TrainMain,
                 leftButton: {handler: ()=>{TrainMain.goBack()} },
-                passProps: {isSpeakerAngle:this.state.isSpeakerAngle,context:data.context}
+                passProps: {isSpeakerAngle:this.state.isSpeakerAngle,context:data.context,gameType:this.props.gameType}
             };
             app.navigator.replace(route);
             if (this.timeoutID != null) {
