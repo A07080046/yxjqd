@@ -223,18 +223,6 @@ module.exports = React.createClass({
                         speechState={this.state.speechState}
                       />
                 </View>
-                <View style={this.state.isSpeakerAngle?styles.trainProgressBarSpeaker:styles.trainProgressBarHearer}>
-                  <Text>{'时间剩余:'+time+'秒'}</Text>
-                  <Progress.Bar
-                      progress={this.state.progress}
-                      width={sr.w-100}
-                      height={10}
-                      borderRadius={6}
-                      animated={true}
-                      borderWidth={1}
-                      borderColor='white'
-                      color='#ff3c30'/>
-                </View>
                 {
                     this.state.overlayShow &&
                     <TrainPropGifMessageBox propCode={this.state.propCode}/>
@@ -247,6 +235,18 @@ module.exports = React.createClass({
                     this.state.overlayShowRank &&
                     <TrainRankMessageBox doRestart={this.doRestart} doExit={this.doExit}></TrainRankMessageBox>
                 }
+                <View style={this.state.isSpeakerAngle?styles.trainProgressBarSpeaker:styles.trainProgressBarHearer}>
+                  <Text>{'时间剩余:'+time+'秒'}</Text>
+                  <Progress.Bar
+                      progress={this.state.progress}
+                      width={sr.w-100}
+                      height={10}
+                      borderRadius={6}
+                      animated={true}
+                      borderWidth={1}
+                      borderColor='white'
+                      color='#ff3c30'/>
+                </View>
             </View>
         )
     }
